@@ -4,7 +4,7 @@
 public class Client {
     public static void main(String[] ar) {
         int serverPort = 6666;
-        String address ="192.168.0.100";/*"192.168.43.60";*/
+        String address ="192.168.0.1";/*"192.168.43.60";*/
         Runnable r = new ClientThread(serverPort,address);
         Thread t = new Thread(r);
         t.start();
