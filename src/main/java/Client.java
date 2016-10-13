@@ -7,7 +7,7 @@ import java.net.Socket;
 /**
  * Created by user on 26.09.2016.
  */
-public class ClientThread  {
+public class Client {
     private JEditorPane editor;
     private int serverPort;
     private String address;
@@ -15,7 +15,7 @@ public class ClientThread  {
     private DataOutputStream out;
     private String name;
 
-    public ClientThread(int serverPort, String address,JEditorPane editor) {
+    public Client(int serverPort, String address, JEditorPane editor) {
         this.serverPort = serverPort;
         this.address = address;
         this.editor=editor;
@@ -24,16 +24,16 @@ public class ClientThread  {
     public void init() {
        name = null;
         try {
-            System.out.print("Enter your name: ");
+           /* System.out.print("Enter your name: ");
             BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
-            name = keyboard.readLine();
+            name = keyboard.readLine();*/
 
             InetAddress ipAddress = InetAddress.getByName(address);
             Integer Port = realPort(ipAddress);
             System.out.println("Any of you heard of a socket with IP address " + address + " and port " + Port + "?");
             Socket socket = new Socket(ipAddress, Port);
             System.out.println("Yes! I just got hold of the program.");
-
+            name="Клон"+Port;
             InputStream sin = socket.getInputStream();
             OutputStream sout = socket.getOutputStream();
 

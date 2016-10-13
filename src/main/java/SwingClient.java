@@ -13,10 +13,12 @@ public class SwingClient extends JFrame {
     private static final long serialVersionUID = 1l;
     private static DataInputStream in;
     private static DataOutputStream out;
+    private static String name;
+
     private JButton sendButton = new JButton("Отправить");
     private JEditorPane sendText = new JEditorPane();
     private static JEditorPane text = new JEditorPane();
-    ClientThread c;
+    Client c;
 
     public static void main(String[] args) throws IOException {
         int serverPort = 6666;
@@ -24,10 +26,11 @@ public class SwingClient extends JFrame {
         /*InetAddress addr = InetAddress.getLocalHost();
         String myLANIP = addr.getHostAddress();
         System.out.println(myLANIP);*/
-        ClientThread c = new ClientThread(serverPort, address,text);
+        Client c = new Client(serverPort, address,text);
         c.init();
         in = c.getIn();
         out = c.getOut();
+        name=c.getName();
 
         new SwingClient();
     }
@@ -35,7 +38,7 @@ public class SwingClient extends JFrame {
     public SwingClient() throws HeadlessException, IOException {
         super();
         setTitle("Клиент");
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         addComponents(getContentPane());
         setPreferredSize(new Dimension(500, 600));
         pack();
@@ -58,9 +61,8 @@ public class SwingClient extends JFrame {
     public class actionButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-              text.setText(text.getText()+ sendText.getText()+"\n");
             try {
-                out.writeUTF(sendText.getText());
+                out.writeUTF(name+": "+sendText.getText());
                 out.flush();
                 sendText.setText("");
             } catch (IOException e1) {

@@ -71,13 +71,15 @@ public class ServerThred implements Runnable {
             }
         } catch (Exception e) {
             try {
-                ListDataOutputStream.get(port-6666).close();
+                ListDataOutputStream.get(port-6666-1).close();
+                ListDataOutputStream.remove(port-6666-1);
                 in.close();
             } catch (IOException e1) {
 
             }
             if (ListDataOutputStream.size()!=0)
             miniThread();
+            else System.out.println("Все подключения были отключены");
         }
     }
 }
