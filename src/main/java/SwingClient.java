@@ -17,7 +17,7 @@ public class SwingClient extends JFrame {
 
     private JButton sendButton = new JButton("Отправить");
     private JEditorPane sendText = new JEditorPane();
-    private static JEditorPane text = new JEditorPane();
+    private static JTextArea text = new JTextArea();
     Client c;
 
     public static void main(String[] args) throws IOException {
@@ -26,11 +26,11 @@ public class SwingClient extends JFrame {
         /*InetAddress addr = InetAddress.getLocalHost();
         String myLANIP = addr.getHostAddress();
         System.out.println(myLANIP);*/
-        Client c = new Client(serverPort, address,text);
+        Client c = new Client(serverPort, address, text);
         c.init();
         in = c.getIn();
         out = c.getOut();
-        name=c.getName();
+        name = c.getName();
 
         new SwingClient();
     }
@@ -48,13 +48,14 @@ public class SwingClient extends JFrame {
     private void addComponents(Container contentPane) {
         Panel panel = new Panel();
         sendButton.addActionListener(new actionButton());
-
+        text.setCaretPosition(0);
+        final JScrollPane jScrollPane = new JScrollPane(text);
+        jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         panel.setLayout(new BorderLayout());
         panel.add(sendButton, BorderLayout.EAST);
-
         panel.add(sendText, BorderLayout.CENTER);
         contentPane.setLayout(new BorderLayout());
-        contentPane.add(text, BorderLayout.CENTER);
+        contentPane.add(jScrollPane, BorderLayout.CENTER);
         contentPane.add(panel, BorderLayout.SOUTH);
     }
 
@@ -62,7 +63,7 @@ public class SwingClient extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                out.writeUTF(name+": "+sendText.getText());
+                out.writeUTF(name + ": " + sendText.getText());
                 out.flush();
                 sendText.setText("");
             } catch (IOException e1) {

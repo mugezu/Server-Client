@@ -7,8 +7,8 @@ import java.io.IOException;
  */
 public class GetMassage implements Runnable {
     DataInputStream in;
-    JEditorPane editor;
-    GetMassage(DataInputStream in, JEditorPane editor) {
+    JTextArea editor;
+    GetMassage(DataInputStream in, JTextArea editor) {
         this.editor=editor;
         this.in = in;
     }

@@ -8,14 +8,14 @@ import java.net.Socket;
  * Created by user on 26.09.2016.
  */
 public class Client {
-    private JEditorPane editor;
+    private JTextArea editor;
     private int serverPort;
     private String address;
     private DataInputStream in;
     private DataOutputStream out;
     private String name;
 
-    public Client(int serverPort, String address, JEditorPane editor) {
+    public Client(int serverPort, String address, JTextArea editor) {
         this.serverPort = serverPort;
         this.address = address;
         this.editor=editor;
@@ -48,7 +48,6 @@ public class Client {
         }
     }
 
-
     private Integer realPort(InetAddress ipAddress) {
         int pp = 0;
         try {
@@ -74,7 +73,6 @@ public class Client {
         }finally {
             return pp;
         }
-
     }
 
     public DataInputStream getIn() {
@@ -100,7 +98,5 @@ public class Client {
     public void setName(String name) {
         this.name = name;
     }
-
-
 }
 
