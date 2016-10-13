@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.List;
 
 
 /**
@@ -18,11 +19,11 @@ public class Client {
     public Client(int serverPort, String address, JTextArea editor) {
         this.serverPort = serverPort;
         this.address = address;
-        this.editor=editor;
+        this.editor = editor;
     }
 
     public void init() {
-       name = null;
+        name = null;
         try {
            /* System.out.print("Enter your name: ");
             BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
@@ -33,14 +34,14 @@ public class Client {
             System.out.println("Any of you heard of a socket with IP address " + address + " and port " + Port + "?");
             Socket socket = new Socket(ipAddress, Port);
             System.out.println("Yes! I just got hold of the program.");
-            name="Клон"+Port;
+            name = "Клон" + Port;
             InputStream sin = socket.getInputStream();
             OutputStream sout = socket.getOutputStream();
 
             in = new DataInputStream(sin);
             out = new DataOutputStream(sout);
 
-            Runnable c = new GetMassage(in,editor);
+            Runnable c = new GetMassage(in, editor);
             Thread d = new Thread(c);
             d.start();
         } catch (Exception x) {
@@ -53,24 +54,23 @@ public class Client {
         try {
             Socket socket = new Socket(ipAddress, serverPort);
             InputStream sin = socket.getInputStream();
-            DataInputStream in = new DataInputStream(sin);
-
-            String[] sub = in.readUTF().split(",");
+            ObjectInputStream in = new ObjectInputStream(new DataInputStream(sin));
+            List<Integer> sub = (List<Integer>) in.readObject();
             for (Integer i = serverPort + 1; i < 6800; i++) {
                 int count = 0;
-                for (Integer j = 0; j < sub.length; j++) {
-                    if (Integer.parseInt(sub[j]) != i)
+                for (Integer j = 0; j < sub.size(); j++) {
+                    if (sub.get(j) != i)
                         count++;
-                    if (j == (sub.length - 1) && count == j + 1) {
+                    if (j == (sub.size() - 1) && count == j + 1) {
                         socket.close();
                         pp = i;
                         i = 6800;
                     }
                 }
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             return pp;
         }
     }

@@ -12,7 +12,10 @@ public class ServerThred implements Runnable {
     DataInputStream in;
     DataOutputStream out;
     static List<DataOutputStream> ListDataOutputStream = new ArrayList<>();
-    static String ListPort = "6666,";
+    static List<Integer> ListPort = new ArrayList<>();
+    static {
+        ListPort.add(6666);
+    }
     int port;
 
     public ServerThred(ServerSocket SS, int port) {
@@ -31,14 +34,15 @@ public class ServerThred implements Runnable {
                     socket = SS.accept();
                     sin = socket.getInputStream();
                     sout = socket.getOutputStream();
-                    DataOutputStream out = new DataOutputStream(sout);
-                    out.writeUTF(ListPort);
+                    ObjectOutputStream out = new ObjectOutputStream(new DataOutputStream(sout));
+
+                    out.writeObject(ListPort);
                     socket.close();
                 }
 
             socket = SS.accept();
             if (port != 6666)
-                ListPort += (port + ",");
+                ListPort.add(port);
             System.out.println("Got a client :) ... Finally, someone saw me through all the cover!");
             System.out.println();
 
@@ -75,11 +79,15 @@ public class ServerThred implements Runnable {
                 ListDataOutputStream.remove(port-6666-1);
                 in.close();
             } catch (IOException e1) {
-
             }
-            if (ListDataOutputStream.size()!=0)
-            miniThread();
-            else System.out.println("Все подключения были отключены");
+            if (ListDataOutputStream.size()!=0) {
+                System.out.println("Пользователь отключился");
+                miniThread();
+               }
+            else {
+                System.out.println("Сервер пуст");
+                run();
+            }
         }
     }
 }
