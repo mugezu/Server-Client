@@ -21,35 +21,32 @@ public class SwingClient extends JFrame {
     public static void main(String[] args) {
         int serverPort = 6666;
         StringBuilder address = new StringBuilder();
-        FileReader r=null;
+        FileReader r = null;
         try {
-             r= new FileReader(new File("ServerIP.bin"));
-           // System.out.println(file.getAbsolutePath());
+            r = new FileReader(new File("ServerIP.bin"));
             int c;
-            while((c=r.read())!=-1){
-                address.append((char)c);
+            while ((c = r.read()) != -1) {
+                address.append((char) c);
             }
         } catch (IOException e) {
             int reply = JOptionPane.showConfirmDialog(null, "Файл ServerIP.bin не найден", "Ошибка", JOptionPane.CLOSED_OPTION);
-        }
-        finally {
+        } finally {
             try {
                 r.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-            Client c = new Client(serverPort, address.toString(), text);
-            c.init();
-            in = c.getIn();
-            out = c.getOut();
-            name = c.getName();
+        Client c = new Client(serverPort, address.toString(), text);
+        c.init();
+        in = c.getIn();
+        out = c.getOut();
+        name = c.getName();
         try {
             new SwingClient();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public SwingClient() throws HeadlessException, IOException {

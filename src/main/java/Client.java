@@ -51,13 +51,18 @@ public class Client {
             Socket socket = new Socket(ipAddress, serverPort);
             InputStream sin = socket.getInputStream();
             ObjectInputStream in = new ObjectInputStream(new DataInputStream(sin));
-            List<Integer> sub = (List<Integer>) in.readObject();
-            for (Integer i = serverPort + 1; i < 6800; i++) {
+            List<Integer> sub = (List<Integer>)in.readObject();
+            System.out.println(sub.size());
+            for (Integer ww:sub
+                 ) {
+                System.out.println(ww);
+            }
+            for (Integer i = serverPort ; i < 6800; i++) {
                 int count = 0;
                 for (Integer j = 0; j < sub.size(); j++) {
-                    if (sub.get(j) != i)
+                    if (!sub.get(j).equals(i))
                         count++;
-                    if (j == (sub.size() - 1) && count == j + 1) {
+                    if (j.equals(sub.size() - 1) && count == j+1 ) {
                         socket.close();
                         pp = i;
                         i = 6800;

@@ -35,7 +35,6 @@ public class ServerThred implements Runnable {
                     sin = socket.getInputStream();
                     sout = socket.getOutputStream();
                     ObjectOutputStream out = new ObjectOutputStream(new DataOutputStream(sout));
-
                     out.writeObject(ListPort);
                     socket.close();
                 }
@@ -43,7 +42,7 @@ public class ServerThred implements Runnable {
             socket = SS.accept();
             if (port != 6666)
                 ListPort.add(port);
-            System.out.println("Got a client :) ... Finally, someone saw me through all the cover!");
+            System.out.println("Новый пользователь " +port);
             System.out.println();
 
             sin = socket.getInputStream();
@@ -52,7 +51,6 @@ public class ServerThred implements Runnable {
             in = new DataInputStream(sin);
             out = new DataOutputStream(sout);
             ListDataOutputStream.add(out);
-
             miniThread();
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,24 +66,31 @@ public class ServerThred implements Runnable {
                 System.out.println("I'm sending it back...");
                 for (DataOutputStream outStream : ListDataOutputStream) {
                     outStream.writeUTF(line);
-                    out.flush();
+                    outStream.flush();
                 }
                 System.out.println("Waiting for the next line...");
                 System.out.println();
             }
         } catch (Exception e) {
             try {
-                ListDataOutputStream.get(port-6666-1).close();
-                ListDataOutputStream.remove(port-6666-1);
+                for (int i=1;i<ListPort.size()+1;i++){
+                    if (ListPort.get(i)==port){
+                        ListPort.remove(i);
+                        ListDataOutputStream.get(i-1).close();
+                        ListDataOutputStream.remove(i-1);
+                        break;
+                    }
+                }
                 in.close();
-            } catch (IOException e1) {
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
-            if (ListDataOutputStream.size()!=0) {
-                System.out.println("Пользователь отключился");
-                miniThread();
-               }
-            else {
-                System.out.println("Сервер пуст");
+            finally {
+                if (ListDataOutputStream.size()==0)
+                    System.out.println( "Пользовать " + port+" отключился"+"\nСервер пуст");
+                else {
+                    System.out.println("Пользовать " + port+" отключился");
+                }
                 run();
             }
         }
