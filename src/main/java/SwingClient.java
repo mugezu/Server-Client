@@ -2,9 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by user on 13.10.2016.
@@ -20,19 +18,38 @@ public class SwingClient extends JFrame {
     private static JTextArea text = new JTextArea();
     Client c;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         int serverPort = 6666;
-        String address = "192.168.0.103";/*"192.168.43.60";*/
-        /*InetAddress addr = InetAddress.getLocalHost();
-        String myLANIP = addr.getHostAddress();
-        System.out.println(myLANIP);*/
-        Client c = new Client(serverPort, address, text);
-        c.init();
-        in = c.getIn();
-        out = c.getOut();
-        name = c.getName();
+        StringBuilder address = new StringBuilder();
+        FileReader r=null;
+        try {
+             r= new FileReader(new File("ServerIP.bin"));
+           // System.out.println(file.getAbsolutePath());
+            int c;
+            while((c=r.read())!=-1){
+                address.append((char)c);
+            }
+        } catch (IOException e) {
+            int reply = JOptionPane.showConfirmDialog(null, "Файл ServerIP.bin не найден", "Ошибка", JOptionPane.CLOSED_OPTION);
+        }
+        finally {
+            try {
+                r.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+            Client c = new Client(serverPort, address.toString(), text);
+            c.init();
+            in = c.getIn();
+            out = c.getOut();
+            name = c.getName();
+        try {
+            new SwingClient();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        new SwingClient();
     }
 
     public SwingClient() throws HeadlessException, IOException {

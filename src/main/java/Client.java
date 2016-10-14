@@ -25,10 +25,6 @@ public class Client {
     public void init() {
         name = null;
         try {
-           /* System.out.print("Enter your name: ");
-            BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
-            name = keyboard.readLine();*/
-
             InetAddress ipAddress = InetAddress.getByName(address);
             Integer Port = realPort(ipAddress);
             System.out.println("Any of you heard of a socket with IP address " + address + " and port " + Port + "?");
