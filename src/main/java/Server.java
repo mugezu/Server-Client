@@ -19,7 +19,7 @@ public class Server {
             List<ServerSocket> a = new Vector<>();
             List<Runnable> r = new ArrayList<>();
             List<Thread> t = new ArrayList<>();
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 200; i++) {
                 a.add(new ServerSocket(port));
                 r.add(new ServerThred(a.get(i),port++));
                 t.add(new Thread(r.get(i)));

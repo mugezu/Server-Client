@@ -15,11 +15,9 @@ public class GetMassage implements Runnable {
 
     @Override
     public void run() {
-        String line = null;
         try {
         while (true) {
-                line =  editor.getText()+"\n"+in.readUTF();
-                editor.setText(line);
+                editor.append("\n"+in.readUTF());
         }
         } catch (IOException e) {
             e.printStackTrace();

@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>My</groupId>
-    <artifactId>Client-Server</artifactId>
-    <version>2.1</version>
+    <artifactId>Client</artifactId>
+    <version>2.3</version>
     <build>
         <plugins>
             <plugin>
