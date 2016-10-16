@@ -85,7 +85,6 @@ public class SwingClient extends JFrame {
                 out.writeUTF(name + ": " + sendText.getText());
                 out.flush();
                 sendText.setText("");
-                text.setCaretPosition(text.getText().length());
             } catch (IOException e1) {
                 e1.printStackTrace();
                 try {

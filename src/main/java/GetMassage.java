@@ -18,6 +18,7 @@ public class GetMassage implements Runnable {
         try {
         while (true) {
                 editor.append("\n"+in.readUTF());
+            editor.setCaretPosition(editor.getText().length());
         }
         } catch (IOException e) {
             e.printStackTrace();
