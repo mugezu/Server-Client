@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.*;
 
 /**
@@ -21,7 +23,8 @@ public class SwingClient extends JFrame {
     public static void main(String[] args) {
         int serverPort = 6666;
         String n=null;
-        JTextArea textArea = new JTextArea();
+
+        JTextField textArea = new JTextField();
         JLabel label = new JLabel();
         label.setText("Представтесь");
         JComponent[] inputs = {label, textArea};
@@ -78,6 +81,25 @@ public class SwingClient extends JFrame {
         Panel panel = new Panel();
         sendButton.addActionListener(new actionButton());
         sendText.setCaretPosition(0);
+        sendText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+                    action();
+                }
+            }
+        });
         final JScrollPane sendTextScroll = new JScrollPane(sendText);
         panel.setLayout(new BorderLayout());
         panel.add(sendButton, BorderLayout.EAST);
@@ -92,22 +114,25 @@ public class SwingClient extends JFrame {
         contentPane.add(jScrollPane, BorderLayout.CENTER);
         contentPane.add(panel, BorderLayout.SOUTH);
     }
+    public void action(){
+        try {
+            out.writeUTF(name + ": " + sendText.getText());
+            out.flush();
+            sendText.setText("");
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            try {
+                out.close();
+            } catch (IOException e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
 
     public class actionButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            try {
-                out.writeUTF(name + ": " + sendText.getText());
-                out.flush();
-                sendText.setText("");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-                try {
-                    out.close();
-                } catch (IOException e2) {
-                    e2.printStackTrace();
-                }
-            }
+           action();
         }
     }
 }
