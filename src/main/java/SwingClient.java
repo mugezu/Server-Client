@@ -11,7 +11,7 @@ public class SwingClient extends JFrame {
     private static final long serialVersionUID = 1l;
     private static DataInputStream in;
     private static DataOutputStream out;
-    private static String name;
+    public static String name;
 
     private JButton sendButton = new JButton("Отправить");
     private JTextArea sendText = new JTextArea();
@@ -20,6 +20,20 @@ public class SwingClient extends JFrame {
 
     public static void main(String[] args) {
         int serverPort = 6666;
+        String n=null;
+        JTextArea textArea = new JTextArea();
+        JLabel label = new JLabel();
+        label.setText("Представтесь");
+        JComponent[] inputs = {label, textArea};
+        int replyi = JOptionPane.showConfirmDialog(null, inputs, "Заголовок", JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (replyi == JOptionPane.OK_OPTION) {
+            System.out.println("OK");
+            System.out.println(textArea.getText());
+            n = textArea.getText().toString();
+        }
+        else {
+            return;
+        }
         StringBuilder address = new StringBuilder();
         FileReader r = null;
         try {
@@ -37,11 +51,12 @@ public class SwingClient extends JFrame {
                 e.printStackTrace();
             }
         }
-        Client c = new Client(serverPort, address.toString(), text);
+        System.out.println(n);
+        name=n;
+        Client c = new Client(serverPort, address.toString(), text, name);
         c.init();
         in = c.getIn();
         out = c.getOut();
-        name = c.getName();
         try {
             new SwingClient();
         } catch (IOException e) {
@@ -67,7 +82,7 @@ public class SwingClient extends JFrame {
         panel.setLayout(new BorderLayout());
         panel.add(sendButton, BorderLayout.EAST);
         panel.add(sendTextScroll, BorderLayout.CENTER);
-        panel.setPreferredSize(new Dimension(200,50));
+        panel.setPreferredSize(new Dimension(200, 50));
 
         text.setLineWrap(true);
         text.setWrapStyleWord(true);

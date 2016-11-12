@@ -1,8 +1,10 @@
 import javax.swing.*;
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.List;
 
 
 /**
@@ -16,21 +18,20 @@ public class Client {
     private DataOutputStream out;
     private String name;
 
-    public Client(int serverPort, String address, JTextArea editor) {
+    public Client(int serverPort, String address, JTextArea editor,String name) {
         this.serverPort = serverPort;
         this.address = address;
         this.editor = editor;
+        this.name=name;
     }
 
     public void init() {
         name = null;
         try {
             InetAddress ipAddress = InetAddress.getByName(address);
-            Integer Port = realPort(ipAddress);
-            System.out.println("Any of you heard of a socket with IP address " + address + " and port " + Port + "?");
-            Socket socket = new Socket(ipAddress, Port);
+            System.out.println("Any of you heard of a socket with IP address " + address + " and port " + serverPort + "?");
+            Socket socket = new Socket(ipAddress, serverPort);
             System.out.println("Yes! I just got hold of the program.");
-            name = "Клон" + Port;
             InputStream sin = socket.getInputStream();
             OutputStream sout = socket.getOutputStream();
 
@@ -42,37 +43,6 @@ public class Client {
             d.start();
         } catch (Exception x) {
             x.printStackTrace();
-        }
-    }
-
-    private Integer realPort(InetAddress ipAddress) {
-        int pp = 0;
-        try {
-            Socket socket = new Socket(ipAddress, serverPort);
-            InputStream sin = socket.getInputStream();
-            ObjectInputStream in = new ObjectInputStream(new DataInputStream(sin));
-            List<Integer> sub = (List<Integer>)in.readObject();
-            System.out.println(sub.size());
-            for (Integer ww:sub
-                 ) {
-                System.out.println(ww);
-            }
-            for (Integer i = serverPort ; i < 6800; i++) {
-                int count = 0;
-                for (Integer j = 0; j < sub.size(); j++) {
-                    if (!sub.get(j).equals(i))
-                        count++;
-                    if (j.equals(sub.size() - 1) && count == j+1 ) {
-                        socket.close();
-                        pp = i;
-                        i = 6800;
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            return pp;
         }
     }
 

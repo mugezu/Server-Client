@@ -2,14 +2,16 @@
  * Created by user on 08.09.2016.
  */
 
+import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Vector;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class Server {
-    public static void main(String[] ar) throws UnknownHostException {
+    public static void main(String[] ar) throws IOException {
         int port = 6666;
         String ip;
         try {
@@ -19,16 +21,23 @@ public class Server {
                 if (iface.isLoopback() || !iface.isUp())
                     continue;
                 Enumeration<InetAddress> addresses = iface.getInetAddresses();
-                while(addresses.hasMoreElements()) {
+                while (addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
                     ip = addr.getHostAddress();
-                    System.out.println(iface.getDisplayName() + " " + ip +" ");
+                    System.out.println(iface.getDisplayName() + " " + ip + " ");
                 }
             }
         } catch (SocketException e) {
             throw new RuntimeException(e);
         }
-        try {
+        ExecutorService threadPool = new ThreadPoolExecutor(4, 64, 60l,
+                TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(256));
+        ServerSocket serverSocket = new ServerSocket(port);
+        while (true) {
+            Socket socket = serverSocket.accept();
+            threadPool.submit(new ServerThred(socket));
+        }
+        /*try {
             List<ServerSocket> a = new Vector<>();
             List<Runnable> r = new ArrayList<>();
             List<Thread> t = new ArrayList<>();
@@ -40,6 +49,6 @@ public class Server {
             }
         } catch (Exception x) {
             x.printStackTrace();
-        }
+        }*/
     }
 }
