@@ -1,6 +1,6 @@
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -10,7 +10,9 @@ public class ServerThred implements Runnable {
     Socket SS;
     DataInputStream in;
     DataOutputStream out;
-    static List<DataOutputStream> ListDataOutputStream = new ArrayList<>();
+    String name;
+    static List<DataOutputStream> ListDataOutputStream = new LinkedList<>();
+    static List<String> ListName= new LinkedList<>();
 
     public ServerThred(Socket SS) {
         this.SS = SS;
@@ -39,6 +41,12 @@ public class ServerThred implements Runnable {
     private void miniThread() {
         String line = null;
         try {
+            name = in.readUTF();
+            ListName.add(name);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
             while (true) {
                 line = in.readUTF();
                 System.out.println("The dumb client just sent me this line : " + line);
@@ -54,11 +62,16 @@ public class ServerThred implements Runnable {
             e.printStackTrace();
         } finally {
             if (ListDataOutputStream.size() == 1)
-                System.out.println("Пользователь отключился\nСервер пуст");
+                System.out.println("Пользователь "+ name +" отключился"+"\nСервер пуст");
             else
-                System.out.println("Пользователь отключился");
+                System.out.println("Пользователь "+ name +" отключился");
             try {
                 ListDataOutputStream.remove(out);
+                ListName.remove(name);
+                for (DataOutputStream outStream : ListDataOutputStream) {
+                    outStream.writeUTF("Пользователь "+ name +" отключился");
+                    outStream.flush();
+                }
                 in.close();
                 out.close();
                 SS.close();

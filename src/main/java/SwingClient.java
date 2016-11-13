@@ -90,13 +90,25 @@ public class SwingClient extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
-            }
+                if (e.getKeyCode()==KeyEvent.VK_ENTER  && e.isShiftDown()) {
+                    sendText.append("\n");
+                    return;
+                }
+                if (e.getKeyCode()==KeyEvent.VK_ENTER ) {
+                    sendText.setCaretPosition(sendText.getText().length());
+                    action();
+                }
 
+            }
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-                if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-                    action();
+                if (e.getKeyCode()==KeyEvent.VK_ENTER  && e.isShiftDown()) {
+                    return;
+                }
+                if (e.getKeyCode()==KeyEvent.VK_ENTER ) {
+                    sendText.setCaretPosition(0);
+                    sendText.setText(null);
                 }
             }
         });
@@ -116,9 +128,10 @@ public class SwingClient extends JFrame {
     }
     public void action(){
         try {
-            out.writeUTF(name + ": " + sendText.getText());
+            out.writeUTF(" " +name + ": " + sendText.getText());
             out.flush();
-            sendText.setText("");
+            sendText.setCaretPosition(0);
+            sendText.setText(null);
         } catch (IOException e1) {
             e1.printStackTrace();
             try {
