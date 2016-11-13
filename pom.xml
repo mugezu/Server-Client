@@ -6,7 +6,7 @@
 
     <groupId>My</groupId>
     <artifactId>Client</artifactId>
-    <version>3.3.5</version>
+    <version>3.3.7</version>
     <build>
         <plugins>
             <plugin>

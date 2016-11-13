@@ -37,18 +37,5 @@ public class Server {
             Socket socket = serverSocket.accept();
             threadPool.submit(new ServerThred(socket));
         }
-        /*try {
-            List<ServerSocket> a = new Vector<>();
-            List<Runnable> r = new ArrayList<>();
-            List<Thread> t = new ArrayList<>();
-            for (int i = 0; i < 200; i++) {
-                a.add(new ServerSocket(port));
-                r.add(new ServerThred(a.get(i),port++));
-                t.add(new Thread(r.get(i)));
-                t.get(i).start();
-            }
-        } catch (Exception x) {
-            x.printStackTrace();
-        }*/
     }
 }

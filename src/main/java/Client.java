@@ -26,18 +26,17 @@ public class Client {
     }
 
     public void init() {
-        name = null;
         try {
             InetAddress ipAddress = InetAddress.getByName(address);
-            System.out.println("Any of you heard of a socket with IP address " + address + " and port " + serverPort + "?");
+            System.out.println("Подключение по адресу " + address + " порт " + serverPort );
             Socket socket = new Socket(ipAddress, serverPort);
-            System.out.println("Yes! I just got hold of the program.");
+            System.out.println("Подключение удачно");
             InputStream sin = socket.getInputStream();
             OutputStream sout = socket.getOutputStream();
 
             in = new DataInputStream(sin);
             out = new DataOutputStream(sout);
-
+            out.writeUTF("\nПодключен новый пользователь "+ name+"\n");
             Runnable c = new GetMassage(in, editor);
             Thread d = new Thread(c);
             d.start();

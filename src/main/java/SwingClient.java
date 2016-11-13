@@ -28,7 +28,7 @@ public class SwingClient extends JFrame {
         JLabel label = new JLabel();
         label.setText("Представтесь");
         JComponent[] inputs = {label, textArea};
-        int replyi = JOptionPane.showConfirmDialog(null, inputs, "Заголовок", JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int replyi = JOptionPane.showConfirmDialog(null, inputs, "Авторизация", JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (replyi == JOptionPane.OK_OPTION) {
             System.out.println("OK");
             System.out.println(textArea.getText());
@@ -56,7 +56,7 @@ public class SwingClient extends JFrame {
         }
         System.out.println(n);
         name=n;
-        Client c = new Client(serverPort, address.toString(), text, name);
+        Client c = new Client(serverPort, address.toString(), text, n);
         c.init();
         in = c.getIn();
         out = c.getOut();
