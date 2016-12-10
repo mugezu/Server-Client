@@ -35,7 +35,7 @@ public class Server {
         ServerSocket serverSocket = new ServerSocket(port);
         while (true) {
             Socket socket = serverSocket.accept();
-            threadPool.submit(new ServerThred(socket));
+            threadPool.submit(new ServerThread(socket));
         }
     }
 }

@@ -69,7 +69,7 @@ public class SwingClient extends JFrame {
 
     public SwingClient() throws HeadlessException, IOException {
         super();
-        setTitle("Клиент");
+        setTitle("Клиент - вместо ВК");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         addComponents(getContentPane());
         setPreferredSize(new Dimension(500, 600));

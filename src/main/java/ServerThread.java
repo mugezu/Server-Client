@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by user on 26.09.2016.
  */
-public class ServerThred implements Runnable {
+public class ServerThread implements Runnable {
     Socket SS;
     DataInputStream in;
     DataOutputStream out;
@@ -14,7 +14,7 @@ public class ServerThred implements Runnable {
     static List<DataOutputStream> ListDataOutputStream = new LinkedList<>();
     static List<String> ListName= new LinkedList<>();
 
-    public ServerThred(Socket SS) {
+    public ServerThread(Socket SS) {
         this.SS = SS;
     }
 
